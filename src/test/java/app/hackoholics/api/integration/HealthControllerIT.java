@@ -21,7 +21,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @ContextConfiguration(initializers = HealthControllerIT.ContextInitializer.class)
 @AutoConfigureMockMvc
-public class HealthControllerIT {
+class HealthControllerIT {
   static class ContextInitializer extends AbstractContextInitializer {
     public static final int SERVER_PORT = anAvailablePort();
 
