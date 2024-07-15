@@ -1,7 +1,6 @@
 package app.hackoholics.api.conf;
 
 import app.hackoholics.api.endpoint.rest.client.ApiClient;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -24,5 +23,4 @@ public class TestConf {
       throw new RuntimeException(e);
     }
   }
-
 }
