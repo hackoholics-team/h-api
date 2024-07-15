@@ -12,7 +12,6 @@ plugins {
 }
 
 group = 'app.hackoholics'
-version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
