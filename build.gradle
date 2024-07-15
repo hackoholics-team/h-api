@@ -1,0 +1,133 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.7'
+	id 'io.spring.dependency-management' version '1.1.5'
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'org.openapi.generator' version '5.3.0'
+	id "org.sonarqube" version "4.4.1.3373"
+	id 'jacoco'
+}
+
+group = 'app.hackoholics'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+
+task generateJavaClient(type: GenerateTask) {
+	generatorName = "java"
+	inputSpec = "$rootDir/doc/api.yml".toString()
+	outputDir = "$buildDir/gen".toString()
+	apiPackage = "app.hackoholics.api.endpoint.rest.api"
+	invokerPackage = "app.hackoholics.api.endpoint.rest.client"
+	modelPackage = "app.hackoholics.api.endpoint.rest.model"
+
+	configOptions = [
+			serializableModel: "true",
+			serializationLibrary: "jackson",
+			dateLibrary: "custom"
+	]
+	typeMappings = [
+			// What date-time type to use when? https://i.stack.imgur.com/QPhGW.png
+			Date: "java.time.LocalDate",
+			DateTime: "java.time.Instant",
+	]
+	library = "native"
+
+	groupId = 'app.hackoholics'
+	id = 'api-gen'
+	skipValidateSpec = false
+	logToStderr = true
+	generateAliasAsModel = false
+	enablePostProcessFile = false
+}
+
+task generateTsClient(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	generatorName = "typescript-axios"
+	inputSpec = "$rootDir/doc/api.yml".toString()
+	outputDir = "$buildDir/gen-ts".toString()
+	typeMappings = [
+			Date    : "Date",
+			DateTime: "Date",
+	]
+	additionalProperties = [
+			npmName    : "@advise/typescript-client",
+			npmVersion : project.properties["args"] ?: "latest"
+	]
+}
+
+task publishJavaClientToMavenLocal(type: Exec, dependsOn: generateJavaClient) {
+	if (Os.isFamily(Os.FAMILY_WINDOWS)){
+		commandLine './.shell/publish_gen_to_maven_local.bat'
+	} else {
+		commandLine './.shell/publish_gen_to_maven_local.sh'
+	}
+}
+tasks.compileJava.dependsOn publishJavaClientToMavenLocal
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+	set('sentryVersion', "7.3.0")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'io.sentry:sentry-spring-boot-starter-jakarta'
+	implementation 'io.sentry:sentry-logback:7.6.0'
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
+	implementation 'com.google.cloud:google-cloud-storage'
+	implementation 'org.apache.tika:tika-core:2.9.2'
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.22'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "io.sentry:sentry-bom:${sentryVersion}"
+	}
+}
+
+tasks.named('test') {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+	inputs.dir snippetsDir
+	dependsOn test
+}
