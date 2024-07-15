@@ -19,6 +19,26 @@ java {
 	}
 }
 
+sonarqube {
+	properties {
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.7"
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	reports {
+		xml.required = true
+		html.required = true
+	}
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
