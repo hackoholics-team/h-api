@@ -119,7 +119,13 @@ components:
       properties:
         id:
           type: string
-        name:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthDate:
+          type: string
+        username:
           type: string
         firebaseId:
           type: string

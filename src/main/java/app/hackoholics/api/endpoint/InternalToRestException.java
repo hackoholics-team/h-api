@@ -4,6 +4,7 @@ import app.hackoholics.api.endpoint.rest.model.Exception;
 import app.hackoholics.api.model.exception.BadRequestException;
 import app.hackoholics.api.model.exception.ForbiddenException;
 import app.hackoholics.api.model.exception.NotFoundException;
+import app.hackoholics.api.model.exception.ProcessingRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,12 @@ public class InternalToRestException {
   ResponseEntity<Exception> handleForbidden(ForbiddenException e) {
     log.info("Forbidden", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
+  }
+
+  @ExceptionHandler(value = {ProcessingRequestException.class})
+  ResponseEntity<Exception> handleProcessing(ProcessingRequestException e) {
+    log.info("Processing", e);
+    return new ResponseEntity<>(toRest(e, HttpStatus.PROCESSING), HttpStatus.PROCESSING);
   }
 
   @ExceptionHandler(value = {NotFoundException.class})

@@ -3,11 +3,13 @@ package app.hackoholics.api.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.time.Instant;
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "\"user\"")
@@ -15,9 +17,12 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 public class User implements Serializable {
-  @Id
-  private String id;
-  private String name;
+  @Id private String id;
+  private String firstName;
+  private String lastName;
+  private String username;
+  @Timestamp private Instant birthDate;
+  @CreationTimestamp private Instant creationDatetime;
   private String firebaseId;
   private String email;
   private String photoId;

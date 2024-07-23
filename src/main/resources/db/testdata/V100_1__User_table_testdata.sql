@@ -1,2 +1,2 @@
-insert into "user" (id, name, email, firebase_id, photo_id) values
-('user1_id', 'John Doe', 'john@email.com', 'user1_firebase_id', 'user1_photo_id');
+insert into "user" (id, first_name, last_name, birth_date, email, firebase_id, photo_id, creation_datetime) values
+('user1_id', 'John', 'Doe', '2002-01-01T01:00:00.00Z', 'john@email.com', 'user1_firebase_id', 'user1_photo_id', '2022-01-01T01:00:00.00Z');
