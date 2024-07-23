@@ -13,7 +13,6 @@ paths:
         - Health
       summary: Health check
       operationId: ping
-      security: []
       description: Check server health
       responses:
         200:
@@ -32,10 +31,10 @@ paths:
         - Security
       summary: Login user.
       operationId: signIn
-      security: []
+      security: [ BearerToken: {} ]
       responses:
         "201":
-          description: Logged in payload.
+          description: Authenticated User
           content:
             application/json:
               schema:
@@ -57,9 +56,8 @@ paths:
         - Security
       summary: Sign up user
       operationId: signUp
-      security: []
       requestBody:
-        description: Sign up payload.
+        description: User to create
         required: true
         content:
           application/json:
@@ -82,48 +80,6 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
-  /call/tokens:
-    post:
-      tags:
-        - Security
-      summary: Generate token for a video call
-      operationId: generateToken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                appId:
-                  type: integer
-                appSecret:
-                  type: string
-                username:
-                  type: string
-      responses:
-        "200":
-          description: Generated token
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                  expiresIn:
-                    type: integer
-                    description: expiration date-time in seconds
-        "400":
-          $ref: "#/components/responses/400"
-        "403":
-          $ref: "#/components/responses/403"
-        "404":
-          $ref: "#/components/responses/404"
-        "429":
-          $ref: "#/components/responses/429"
-        "500":
-          $ref: "#/components/responses/500"
-
 
 components:
   responses:
@@ -163,40 +119,14 @@ components:
       properties:
         id:
           type: string
-        lastName:
+        name:
           type: string
-        authenticationId:
+        firebaseId:
           type: string
-        firstName:
-          type: string
-        nic:
-          type: string
-        birthDate:
-          type: string
-          format: date-time
         email:
           type: string
         photoId:
           type: string
-        sex:
-          type: string
-          enum:
-            - MALE
-            - FEMININE
-        contact:
-          type: string
-        address:
-          type: string
-        country:
-          type: string
-        city:
-          type: string
-        role:
-          type: string
-          enum:
-            - ADVISOR
-            - DOCTOR
-            - PATIENT
 
     Page:
       type: integer
