@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +16,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "\"user\"")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 public class User implements Serializable {
   @Id private String id;

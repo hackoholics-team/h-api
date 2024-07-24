@@ -33,10 +33,6 @@ public class AuthProvider extends AbstractUserDetailsAuthenticationProvider {
     return getPrincipal().getUser();
   }
 
-  public static String getBearer() {
-    return getPrincipal().getBearer();
-  }
-
   @Override
   protected void additionalAuthenticationChecks(
       UserDetails userDetails, UsernamePasswordAuthenticationToken authentication)
@@ -46,6 +42,6 @@ public class AuthProvider extends AbstractUserDetailsAuthenticationProvider {
   protected UserDetails retrieveUser(
       String username, UsernamePasswordAuthenticationToken authentication)
       throws AuthenticationException {
-    return null;
+    return (Principal) authentication.getPrincipal();
   }
 }

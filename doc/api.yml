@@ -31,7 +31,6 @@ paths:
         - Security
       summary: Login user.
       operationId: signIn
-      security: [ BearerToken: {} ]
       responses:
         "201":
           description: Authenticated User
@@ -125,6 +124,7 @@ components:
           type: string
         birthDate:
           type: string
+          format: date-time
         username:
           type: string
         firebaseId:

@@ -37,12 +37,13 @@ public class FirebaseService {
     return FirebaseAuth.getInstance();
   }
 
-  public FirebaseToken getUserByBearer(String bearer) {
+  public FirebaseUser getUserByBearer(String bearer) {
     if (bearer == null || bearer.isEmpty()) {
       throw new IllegalArgumentException("Bearer token must not be null or empty");
     }
     try {
-      return auth().verifyIdToken(bearer);
+      FirebaseToken token = auth().verifyIdToken(bearer);
+      return new FirebaseUser(token.getEmail(), token.getUid());
     } catch (FirebaseAuthException e) {
       throw new ApiException(SERVER_EXCEPTION, e.getMessage());
     }
