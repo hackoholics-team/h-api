@@ -27,7 +27,10 @@ public abstract class AbstractContextInitializer
         "spring.datasource.url=" + postgresContainer.getJdbcUrl(),
         "spring.datasource.username=" + postgresContainer.getUsername(),
         "spring.datasource.password=" + postgresContainer.getPassword(),
-        "firebase.private.key={}",
+        "firebase.access.key={}",
+        "project.access.key={}",
+        "google.project.id=dummy",
+        "bucket.name=dummy",
         "sentry.dsn=https://public@sentry.example.com/1",
         "sentry.environment=prod",
         "spring.flyway.locations=classpath:/db/migration," + FLYWAY_TESTDATA_PATH);
