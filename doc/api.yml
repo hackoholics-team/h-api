@@ -4,7 +4,7 @@ info:
   title: API
   description: This API provides access to the Hackoholics service.
 servers:
-  - url: "http://localhost:8080"
+  - url: "https://h-api-f3w5n4qb4a-uc.a.run.app"
 
 paths:
   /ping:
@@ -13,6 +13,8 @@ paths:
         - Health
       summary: Health check
       operationId: ping
+      security:
+        - BearerAuth: [ ]
       description: Check server health
       responses:
         200:
@@ -31,8 +33,10 @@ paths:
         - Security
       summary: Login user.
       operationId: signIn
+      security:
+        - BearerAuth: [ ]
       responses:
-        "201":
+        "200":
           description: Authenticated User
           content:
             application/json:
@@ -55,6 +59,8 @@ paths:
         - Security
       summary: Sign up user
       operationId: signUp
+      security:
+        - BearerAuth: [ ]
       requestBody:
         description: User to create
         required: true
@@ -79,8 +85,44 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
-
+  /chat:
+    post:
+      tags:
+        - Chat
+      summary: Chat with ai
+      operationId: sendMessage
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        "200":
+          description: Messages sequence
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
   responses:
     400:
       description: Bad request
