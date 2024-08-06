@@ -68,6 +68,8 @@ public class SecurityConf {
                     .permitAll()
                     .requestMatchers(POST, "/signin")
                     .authenticated()
+                    .requestMatchers(POST, "/chat")
+                    .authenticated()
                     .anyRequest()
                     .denyAll())
         .csrf(AbstractHttpConfigurer::disable)
