@@ -2,10 +2,12 @@ package app.hackoholics.api.service.google.gemini;
 
 import app.hackoholics.api.service.google.GoogleConf;
 import com.google.cloud.vertexai.VertexAI;
+import com.google.cloud.vertexai.generativeai.ChatSession;
 import com.google.cloud.vertexai.generativeai.GenerativeModel;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
 
 @Service
 public class GeminiService {
@@ -23,7 +25,7 @@ public class GeminiService {
   }
 
   @SneakyThrows
-  public GenerativeModel getModel() {
+  private GenerativeModel getModel() {
     var vertexAi =
         new VertexAI.Builder()
             .setProjectId(googleConf.getProjectId())
@@ -31,5 +33,10 @@ public class GeminiService {
             .setCredentials(googleConf.getProjectCredentials())
             .build();
     return new GenerativeModel(modelType, vertexAi);
+  }
+
+  @SessionScope
+  public ChatSession chatSession() {
+    return new ChatSession(getModel());
   }
 }

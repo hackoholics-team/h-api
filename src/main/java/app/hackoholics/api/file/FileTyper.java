@@ -1,12 +1,11 @@
 package app.hackoholics.api.file;
 
-import lombok.SneakyThrows;
-import org.apache.tika.Tika;
+import static org.springframework.http.MediaType.parseMediaType;
 
 import java.io.File;
 import java.util.function.Function;
-
-import static org.springframework.http.MediaType.parseMediaType;
+import lombok.SneakyThrows;
+import org.apache.tika.Tika;
 
 public class FileTyper implements Function<File, String> {
   @SneakyThrows
