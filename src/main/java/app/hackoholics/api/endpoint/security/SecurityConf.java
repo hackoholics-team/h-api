@@ -1,8 +1,11 @@
 package app.hackoholics.api.endpoint.security;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.OPTIONS;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
+import app.hackoholics.api.endpoint.security.matcher.SelfUserMatcher;
 import app.hackoholics.api.model.exception.ForbiddenException;
 import app.hackoholics.api.service.UserService;
 import app.hackoholics.api.service.google.firebase.FirebaseService;
@@ -69,6 +72,12 @@ public class SecurityConf {
                     .requestMatchers(POST, "/signin")
                     .authenticated()
                     .requestMatchers(POST, "/chat")
+                    .authenticated()
+                    .requestMatchers(new SelfUserMatcher(PUT, "/users/*/raw"))
+                    .authenticated()
+                    .requestMatchers(PUT, "/files/*/raw")
+                    .authenticated()
+                    .requestMatchers(GET, "/files/*/raw")
                     .authenticated()
                     .anyRequest()
                     .denyAll())
