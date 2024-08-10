@@ -93,12 +93,19 @@ paths:
       operationId: sendMessage
       security:
         - BearerAuth: [ ]
+      parameters:
+        - name: message
+          in: query
+          required: false
+          schema:
+            type: string
       requestBody:
         required: true
         content:
-          application/json:
+          image/*:
             schema:
               type: string
+              format: binary
       responses:
         "200":
           description: Messages sequence

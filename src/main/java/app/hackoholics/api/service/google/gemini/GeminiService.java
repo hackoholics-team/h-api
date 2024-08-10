@@ -1,11 +1,15 @@
 package app.hackoholics.api.service.google.gemini;
 
+import static app.hackoholics.api.file.FileTyper.parseMediaTypeFromBytes;
+
 import app.hackoholics.api.service.google.GoogleConf;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.vertexai.VertexAI;
 import com.google.cloud.vertexai.api.Part;
 import com.google.cloud.vertexai.generativeai.ChatSession;
+import com.google.cloud.vertexai.generativeai.ContentMaker;
 import com.google.cloud.vertexai.generativeai.GenerativeModel;
+import com.google.cloud.vertexai.generativeai.PartMaker;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,10 +44,12 @@ public class GeminiService {
   }
 
   @SneakyThrows
-  public List<String> sendMessage(String message) {
-    session.sendMessage(message);
-    var history = session.getHistory();
-    return history.stream()
+  public List<String> sendMessage(String message, byte[] file) {
+    var request =
+        ContentMaker.fromMultiModalData(
+            message, PartMaker.fromMimeTypeAndData(parseMediaTypeFromBytes(file).toString(), file));
+    session.sendMessage(request);
+    return session.getHistory().stream()
         .flatMap(content -> content.getPartsList().stream().map(Part::getText))
         .toList();
   }
