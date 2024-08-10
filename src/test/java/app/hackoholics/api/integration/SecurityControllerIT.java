@@ -12,7 +12,9 @@ import app.hackoholics.api.conf.TestConf;
 import app.hackoholics.api.endpoint.rest.api.SecurityApi;
 import app.hackoholics.api.endpoint.rest.client.ApiClient;
 import app.hackoholics.api.endpoint.rest.client.ApiException;
+import app.hackoholics.api.service.google.GoogleConf;
 import app.hackoholics.api.service.google.firebase.FirebaseService;
+import app.hackoholics.api.service.google.gemini.GeminiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,7 +28,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration(initializers = SecurityControllerIT.ContextInitializer.class)
 @AutoConfigureMockMvc
 class SecurityControllerIT {
-  @MockBean private FirebaseService firebaseService;
+  @MockBean GoogleConf googleConf;
+  @MockBean GeminiService geminiService;
+  @MockBean FirebaseService firebaseService;
 
   private ApiClient anApiClient(String token) {
     return TestConf.anApiClient(token, ContextInitializer.SERVER_PORT);

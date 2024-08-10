@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import app.hackoholics.api.AbstractContextInitializer;
+import app.hackoholics.api.service.google.GoogleConf;
+import app.hackoholics.api.service.google.gemini.GeminiService;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,6 +15,7 @@ import java.net.http.HttpResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -22,6 +25,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration(initializers = HealthControllerIT.ContextInitializer.class)
 @AutoConfigureMockMvc
 class HealthControllerIT {
+  @MockBean GoogleConf googleConf;
+  @MockBean GeminiService geminiService;
+
   static class ContextInitializer extends AbstractContextInitializer {
     public static final int SERVER_PORT = anAvailablePort();
 
