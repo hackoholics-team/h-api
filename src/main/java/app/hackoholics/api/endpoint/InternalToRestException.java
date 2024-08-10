@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -52,6 +53,12 @@ public class InternalToRestException {
   @ExceptionHandler(value = {ForbiddenException.class})
   ResponseEntity<Exception> handleForbidden(ForbiddenException e) {
     log.info("Forbidden", e);
+    return new ResponseEntity<>(toRest(e, HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
+  }
+
+  @ExceptionHandler(value = {AuthenticationServiceException.class})
+  ResponseEntity<Exception> handleAuthenticationException(AuthenticationServiceException e) {
+    log.info("AuthenticationServiceException ", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
   }
 

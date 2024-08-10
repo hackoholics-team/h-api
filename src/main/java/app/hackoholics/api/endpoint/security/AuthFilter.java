@@ -4,54 +4,36 @@ import app.hackoholics.api.service.UserService;
 import app.hackoholics.api.service.google.firebase.FirebaseService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.filter.GenericFilterBean;
 
 @Slf4j
-public class AuthFilter extends AbstractAuthenticationProcessingFilter {
+@AllArgsConstructor
+public class AuthFilter extends GenericFilterBean {
+  private final RequestMatcher requestMatcher;
   private final FirebaseService firebaseService;
   private final UserService userService;
 
-  protected AuthFilter(
-      RequestMatcher requiresAuthenticationRequestMatcher,
-      FirebaseService firebaseService,
-      UserService userService) {
-    super(requiresAuthenticationRequestMatcher);
-    this.firebaseService = firebaseService;
-    this.userService = userService;
-  }
-
   @Override
-  protected void successfulAuthentication(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      FilterChain chain,
-      Authentication authenticated)
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    super.successfulAuthentication(request, response, chain, authenticated);
+    var httpRequest = (HttpServletRequest) request;
+    if (requestMatcher.matches(httpRequest)) {
+      String token = AuthProvider.getBearer(httpRequest);
+      var fUser = firebaseService.getUserByBearer(token);
+      var authUser = userService.getByEmailAndAuthenticationId(fUser.email(), fUser.id());
+      var principal = new Principal(token, authUser);
+      var authentication = new BearerAuthentication(principal, List.of());
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
     chain.doFilter(request, response);
-  }
-
-  @Override
-  public Authentication attemptAuthentication(
-      HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-    String token = AuthProvider.getBearer(request);
-    var fUser = firebaseService.getUserByBearer(token);
-    var authUser = userService.getByEmailAndAuthenticationId(fUser.email(), fUser.id());
-    var principal = new Principal(token, authUser);
-    UsernamePasswordAuthenticationToken authentication =
-        new UsernamePasswordAuthenticationToken(principal, token);
-    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    return getAuthenticationManager().authenticate(authentication);
   }
 }
