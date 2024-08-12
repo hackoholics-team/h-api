@@ -1,5 +1,7 @@
 package app.hackoholics.api.integration;
 
+import static app.hackoholics.api.conf.TestConf.BAD_TOKEN;
+import static app.hackoholics.api.conf.TestConf.PROCESSING_TOKEN;
 import static app.hackoholics.api.conf.TestConf.VALID_TOKEN;
 import static app.hackoholics.api.conf.TestConf.anAvailablePort;
 import static app.hackoholics.api.conf.TestConf.setUpFirebaseService;
@@ -15,11 +17,17 @@ import app.hackoholics.api.endpoint.rest.client.ApiException;
 import app.hackoholics.api.service.google.GoogleConf;
 import app.hackoholics.api.service.google.firebase.FirebaseService;
 import app.hackoholics.api.service.google.gemini.GeminiService;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -49,6 +57,40 @@ class SecurityControllerIT {
     var actual = api.signIn();
 
     assertEquals(user(), actual);
+  }
+
+  @Test
+  void authenticate_user_ko() throws IOException, InterruptedException {
+    HttpClient unauthenticatedClient = HttpClient.newBuilder().build();
+    String basePath = "http://localhost:" + SecurityControllerIT.ContextInitializer.SERVER_PORT;
+
+    HttpResponse<String> response =
+        unauthenticatedClient.send(
+            HttpRequest.newBuilder()
+                .uri(URI.create(basePath + "/signin"))
+                .header("Access-Control-Request-Method", "POST")
+                .header("Authorization", "Bearer " + BAD_TOKEN)
+                .build(),
+            HttpResponse.BodyHandlers.ofString());
+
+    assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+  }
+
+  @Test
+  void authenticate_processing_user() throws IOException, InterruptedException {
+    HttpClient unauthenticatedClient = HttpClient.newBuilder().build();
+    String basePath = "http://localhost:" + SecurityControllerIT.ContextInitializer.SERVER_PORT;
+
+    HttpResponse<String> response =
+        unauthenticatedClient.send(
+            HttpRequest.newBuilder()
+                .uri(URI.create(basePath + "/signin"))
+                .header("Access-Control-Request-Method", "POST")
+                .header("Authorization", "Bearer " + PROCESSING_TOKEN)
+                .build(),
+            HttpResponse.BodyHandlers.ofString());
+
+    assertEquals(HttpStatus.PROCESSING.value(), response.statusCode());
   }
 
   @Test

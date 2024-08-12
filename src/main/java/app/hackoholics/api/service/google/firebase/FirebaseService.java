@@ -1,8 +1,6 @@
 package app.hackoholics.api.service.google.firebase;
 
-import static app.hackoholics.api.model.exception.ApiException.ExceptionType.SERVER_EXCEPTION;
-
-import app.hackoholics.api.model.exception.ApiException;
+import app.hackoholics.api.model.exception.ForbiddenException;
 import app.hackoholics.api.service.google.GoogleConf;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -45,7 +43,7 @@ public class FirebaseService {
       FirebaseToken token = auth().verifyIdToken(bearer);
       return new FirebaseUser(token.getEmail(), token.getUid());
     } catch (FirebaseAuthException e) {
-      throw new ApiException(SERVER_EXCEPTION, e.getMessage());
+      throw new ForbiddenException(e.getMessage());
     }
   }
 }
