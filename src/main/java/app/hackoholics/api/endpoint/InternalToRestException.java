@@ -6,11 +6,13 @@ import app.hackoholics.api.model.exception.ForbiddenException;
 import app.hackoholics.api.model.exception.NotFoundException;
 import app.hackoholics.api.model.exception.ProcessingRequestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -57,20 +59,20 @@ public class InternalToRestException {
     return new ResponseEntity<>(toRest(e, HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
   }
 
-  @ExceptionHandler(value = {AuthenticationServiceException.class})
-  ResponseEntity<Exception> handleAuthenticationException(AuthenticationServiceException e) {
-    log.info("Unauthorized authentication ", e);
-    return new ResponseEntity<>(toRest(e, HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
-  }
-
+  @Primary
   @ExceptionHandler(value = {BadCredentialsException.class})
   ResponseEntity<Exception> handleBadCredentials(BadCredentialsException e) {
     log.info("Bad credentials ", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(value = {ProcessingRequestException.class})
-  ResponseEntity<Exception> handleProcessing(ProcessingRequestException e) {
+  @ExceptionHandler(
+      value = {
+        ProcessingRequestException.class,
+        AccessDeniedException.class,
+        AuthenticationException.class
+      })
+  ResponseEntity<Exception> handleProcessing(java.lang.Exception e) {
     log.info("Processing", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.PROCESSING), HttpStatus.PROCESSING);
   }

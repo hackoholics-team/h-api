@@ -5,12 +5,12 @@ import static org.mockito.Mockito.when;
 
 import app.hackoholics.api.endpoint.rest.client.ApiClient;
 import app.hackoholics.api.endpoint.rest.model.User;
-import app.hackoholics.api.model.exception.ForbiddenException;
 import app.hackoholics.api.service.google.firebase.FirebaseService;
 import app.hackoholics.api.service.google.firebase.FirebaseUser;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.time.Instant;
+import org.springframework.security.authentication.BadCredentialsException;
 
 public class TestConf {
   public static final String VALID_TOKEN = "valid_token";
@@ -41,7 +41,7 @@ public class TestConf {
     when(firebaseServiceMock.getUserByBearer(PROCESSING_TOKEN))
         .thenReturn(new FirebaseUser(randomUUID().toString(), randomUUID().toString()));
     when(firebaseServiceMock.getUserByBearer(BAD_TOKEN))
-        .thenThrow(new ForbiddenException("Token is invalid or expired."));
+        .thenThrow(new BadCredentialsException("Token is invalid or expired."));
   }
 
   public static app.hackoholics.api.model.User authUser() {

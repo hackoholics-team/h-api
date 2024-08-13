@@ -1,6 +1,5 @@
 package app.hackoholics.api.service.google.firebase;
 
-import app.hackoholics.api.model.exception.ForbiddenException;
 import app.hackoholics.api.service.google.GoogleConf;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -9,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,13 +37,13 @@ public class FirebaseService {
 
   public FirebaseUser getUserByBearer(String bearer) {
     if (bearer == null || bearer.isEmpty()) {
-      throw new IllegalArgumentException("Bearer token must not be null or empty");
+      throw new BadCredentialsException("Bearer token must not be null or empty");
     }
     try {
       FirebaseToken token = auth().verifyIdToken(bearer);
       return new FirebaseUser(token.getEmail(), token.getUid());
     } catch (FirebaseAuthException e) {
-      throw new ForbiddenException(e.getMessage());
+      throw new BadCredentialsException(e.getMessage());
     }
   }
 }

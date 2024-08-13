@@ -2,7 +2,7 @@ package app.hackoholics.api.endpoint.security;
 
 import app.hackoholics.api.model.User;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
@@ -26,7 +26,7 @@ public class AuthProvider extends AbstractUserDetailsAuthenticationProvider {
     if (authorization != null && authorization.startsWith(BEARER_PREFIX)) {
       return authorization.substring(BEARER_PREFIX.length());
     }
-    throw new AuthenticationServiceException("Bearer token is missing or invalid");
+    throw new BadCredentialsException("Bearer token is missing or invalid");
   }
 
   public static User getUser() {

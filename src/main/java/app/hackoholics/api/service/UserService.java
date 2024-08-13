@@ -2,9 +2,9 @@ package app.hackoholics.api.service;
 
 import app.hackoholics.api.model.User;
 import app.hackoholics.api.model.exception.NotFoundException;
-import app.hackoholics.api.model.exception.ProcessingRequestException;
 import app.hackoholics.api.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +17,7 @@ public class UserService {
         .findByEmailAndFirebaseId(email, authId)
         .orElseThrow(
             () ->
-                new ProcessingRequestException(
+                new BadCredentialsException(
                     "User.email=" + email + " should complete inscription"));
   }
 

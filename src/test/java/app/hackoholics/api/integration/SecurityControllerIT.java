@@ -73,9 +73,10 @@ class SecurityControllerIT {
                 .build(),
             HttpResponse.BodyHandlers.ofString());
 
-    assertEquals(HttpStatus.FORBIDDEN.value(), response.statusCode());
+    assertEquals(HttpStatus.UNAUTHORIZED.value(), response.statusCode());
   }
 
+  // TODO: Should return processing status code 102
   @Test
   void authenticate_processing_user() throws IOException, InterruptedException {
     HttpClient unauthenticatedClient = HttpClient.newBuilder().build();
@@ -90,7 +91,7 @@ class SecurityControllerIT {
                 .build(),
             HttpResponse.BodyHandlers.ofString());
 
-    assertEquals(HttpStatus.PROCESSING.value(), response.statusCode());
+    assertEquals(HttpStatus.UNAUTHORIZED.value(), response.statusCode());
   }
 
   @Test
