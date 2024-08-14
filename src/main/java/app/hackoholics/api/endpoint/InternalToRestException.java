@@ -4,6 +4,7 @@ import app.hackoholics.api.endpoint.rest.model.Exception;
 import app.hackoholics.api.model.exception.BadRequestException;
 import app.hackoholics.api.model.exception.ForbiddenException;
 import app.hackoholics.api.model.exception.NotFoundException;
+import app.hackoholics.api.model.exception.NotImplementedException;
 import app.hackoholics.api.model.exception.ProcessingRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
@@ -81,6 +82,12 @@ public class InternalToRestException {
   public ResponseEntity<Exception> handleNotFound(NotFoundException e) {
     log.info("Not found", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(value = {NotImplementedException.class})
+  public ResponseEntity<Exception> handleNotImplemented(NotImplementedException e) {
+    log.info("Not found", e);
+    return new ResponseEntity<>(toRest(e, HttpStatus.NOT_IMPLEMENTED), HttpStatus.NOT_IMPLEMENTED);
   }
 
   @ExceptionHandler(value = {java.lang.Exception.class})

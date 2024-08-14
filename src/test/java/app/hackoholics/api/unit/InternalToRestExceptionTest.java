@@ -7,6 +7,7 @@ import app.hackoholics.api.endpoint.rest.model.Exception;
 import app.hackoholics.api.model.exception.BadRequestException;
 import app.hackoholics.api.model.exception.ForbiddenException;
 import app.hackoholics.api.model.exception.NotFoundException;
+import app.hackoholics.api.model.exception.NotImplementedException;
 import app.hackoholics.api.model.exception.ProcessingRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ public class InternalToRestExceptionTest {
   private ForbiddenException forbiddenException;
   private NotFoundException notFoundException;
   private ProcessingRequestException processingRequestException;
+  private NotImplementedException notImplementedException;
 
   @BeforeEach
   public void setUp() {
@@ -29,6 +31,7 @@ public class InternalToRestExceptionTest {
     forbiddenException = new ForbiddenException("Forbidden");
     notFoundException = new NotFoundException("Not found");
     processingRequestException = new ProcessingRequestException("Processing error");
+    notImplementedException = new NotImplementedException("Not implemented");
   }
 
   @Test
@@ -52,6 +55,14 @@ public class InternalToRestExceptionTest {
     ResponseEntity<Exception> response = internalToRestException.handleNotFound(notFoundException);
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertEquals("Not found", response.getBody().getMessage());
+  }
+
+  @Test
+  public void testHandleNotImplemented() {
+    ResponseEntity<Exception> response =
+        internalToRestException.handleNotImplemented(notImplementedException);
+    assertEquals(HttpStatus.NOT_IMPLEMENTED, response.getStatusCode());
+    assertEquals("Not implemented", response.getBody().getMessage());
   }
 
   @Test
