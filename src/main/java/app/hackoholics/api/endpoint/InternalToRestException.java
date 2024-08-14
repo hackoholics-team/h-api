@@ -23,7 +23,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Slf4j
 public class InternalToRestException {
   @ExceptionHandler(value = {BadRequestException.class})
-  ResponseEntity<Exception> handleBadRequest(BadRequestException e) {
+  public ResponseEntity<Exception> handleBadRequest(BadRequestException e) {
     log.info("Bad request", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
   }
@@ -54,7 +54,7 @@ public class InternalToRestException {
   }
 
   @ExceptionHandler(value = {ForbiddenException.class})
-  ResponseEntity<Exception> handleForbidden(ForbiddenException e) {
+  public ResponseEntity<Exception> handleForbidden(ForbiddenException e) {
     log.info("Forbidden", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
   }
@@ -72,19 +72,19 @@ public class InternalToRestException {
         AccessDeniedException.class,
         AuthenticationException.class
       })
-  ResponseEntity<Exception> handleProcessing(java.lang.Exception e) {
+  public ResponseEntity<Exception> handleProcessing(java.lang.Exception e) {
     log.info("Processing", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.PROCESSING), HttpStatus.PROCESSING);
   }
 
   @ExceptionHandler(value = {NotFoundException.class})
-  ResponseEntity<Exception> handleNotFound(NotFoundException e) {
+  public ResponseEntity<Exception> handleNotFound(NotFoundException e) {
     log.info("Not found", e);
     return new ResponseEntity<>(toRest(e, HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(value = {java.lang.Exception.class})
-  ResponseEntity<Exception> handleDefault(java.lang.Exception e) {
+  public ResponseEntity<Exception> handleDefault(java.lang.Exception e) {
     log.error("Internal error", e);
     return new ResponseEntity<>(
         toRest(e, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
