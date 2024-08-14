@@ -1,17 +1,17 @@
 package app.hackoholics.api.unit;
 
-import app.hackoholics.api.endpoint.rest.client.ApiException;
-import app.hackoholics.api.service.FileService;
-import app.hackoholics.api.service.google.filestorage.BucketComponent;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import app.hackoholics.api.model.exception.ApiException;
+import app.hackoholics.api.service.FileService;
+import app.hackoholics.api.service.google.filestorage.BucketComponent;
+import java.io.IOException;
+import java.util.Arrays;
+import org.junit.jupiter.api.Test;
 
 public class FileServiceTest {
   private static final String FILE_ID = "fileId";
@@ -22,7 +22,7 @@ public class FileServiceTest {
   void upload_file_ok() throws IOException {
     when(bucketComponent.uploadFile(any(), any())).thenReturn(FILE_ID);
 
-    var actual = subject.uploadFile(FILE_ID, new byte[]{});
+    var actual = subject.uploadFile(FILE_ID, new byte[] {});
 
     assertEquals(FILE_ID, actual);
   }
@@ -31,15 +31,15 @@ public class FileServiceTest {
   void upload_file_ko() throws IOException {
     when(bucketComponent.uploadFile(any(), any())).thenThrow(new IOException());
 
-    assertThrows(ApiException.class, ()-> subject.uploadFile(FILE_ID, new byte[]{}));
+    assertThrows(ApiException.class, () -> subject.uploadFile(FILE_ID, new byte[] {}));
   }
 
   @Test
-  void download_file_ok(){
-    when(bucketComponent.downloadFile(FILE_ID)).thenReturn(new byte[]{});
+  void download_file_ok() {
+    when(bucketComponent.downloadFile(FILE_ID)).thenReturn(new byte[] {});
 
     var actual = subject.downloadFile(FILE_ID);
 
-    assertEquals(new byte[]{}, actual);
+    assertEquals(Arrays.toString(new byte[] {}), Arrays.toString(actual));
   }
 }

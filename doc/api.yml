@@ -179,11 +179,12 @@ paths:
         - BearerAuth: [ ]
       responses:
         "200":
-          description: File identifier
+          description: Required file
           content:
-            text/plain:
+            image/*:
               schema:
                 type: string
+                format: binary
         "400":
           $ref: "#/components/responses/400"
         "403":
