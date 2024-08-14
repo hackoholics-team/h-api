@@ -15,7 +15,7 @@ import org.mockito.InjectMocks;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class InternalToRestExceptionTest {
+class InternalToRestExceptionTest {
 
   @InjectMocks private InternalToRestException internalToRestException;
   private BadRequestException badRequestException;
@@ -25,7 +25,7 @@ public class InternalToRestExceptionTest {
   private NotImplementedException notImplementedException;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     internalToRestException = new InternalToRestException();
     badRequestException = new BadRequestException("Bad request");
     forbiddenException = new ForbiddenException("Forbidden");
@@ -35,7 +35,7 @@ public class InternalToRestExceptionTest {
   }
 
   @Test
-  public void testHandleBadRequest() {
+  void testHandleBadRequest() {
     ResponseEntity<Exception> response =
         internalToRestException.handleBadRequest(badRequestException);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -43,7 +43,7 @@ public class InternalToRestExceptionTest {
   }
 
   @Test
-  public void testHandleForbidden() {
+  void testHandleForbidden() {
     ResponseEntity<Exception> response =
         internalToRestException.handleForbidden(forbiddenException);
     assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
@@ -51,14 +51,14 @@ public class InternalToRestExceptionTest {
   }
 
   @Test
-  public void testHandleNotFound() {
+  void testHandleNotFound() {
     ResponseEntity<Exception> response = internalToRestException.handleNotFound(notFoundException);
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertEquals("Not found", response.getBody().getMessage());
   }
 
   @Test
-  public void testHandleNotImplemented() {
+  void testHandleNotImplemented() {
     ResponseEntity<Exception> response =
         internalToRestException.handleNotImplemented(notImplementedException);
     assertEquals(HttpStatus.NOT_IMPLEMENTED, response.getStatusCode());
@@ -66,7 +66,7 @@ public class InternalToRestExceptionTest {
   }
 
   @Test
-  public void testHandleProcessing() {
+  void testHandleProcessing() {
     ResponseEntity<Exception> response =
         internalToRestException.handleProcessing(processingRequestException);
     assertEquals(HttpStatus.PROCESSING, response.getStatusCode());
@@ -74,7 +74,7 @@ public class InternalToRestExceptionTest {
   }
 
   @Test
-  public void testHandleDefault() {
+  void testHandleDefault() {
     java.lang.Exception genericException = new java.lang.Exception("Generic error");
     ResponseEntity<Exception> response = internalToRestException.handleDefault(genericException);
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
