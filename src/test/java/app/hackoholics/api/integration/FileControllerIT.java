@@ -32,7 +32,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @ContextConfiguration(initializers = FileControllerIT.ContextInitializer.class)
 @AutoConfigureMockMvc
-public class FileControllerIT {
+class FileControllerIT {
   private static final String FILE_ID = "fileId";
   private static final byte[] file = "photo.png".getBytes();
   @MockBean GoogleConf googleConf;

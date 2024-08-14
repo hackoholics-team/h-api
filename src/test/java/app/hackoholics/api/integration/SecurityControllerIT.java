@@ -76,7 +76,6 @@ class SecurityControllerIT {
     assertEquals(HttpStatus.UNAUTHORIZED.value(), response.statusCode());
   }
 
-  // TODO: Should return processing status code 102
   @Test
   void authenticate_processing_user() throws IOException, InterruptedException {
     HttpClient unauthenticatedClient = HttpClient.newBuilder().build();

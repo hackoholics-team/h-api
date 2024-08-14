@@ -13,7 +13,7 @@ import app.hackoholics.api.service.google.gemini.GeminiService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-public class ChatServiceTest {
+class ChatServiceTest {
   private final GeminiService geminiService = mock();
   private final ChatService subject = new ChatService(geminiService);
 

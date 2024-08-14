@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
-public class FileServiceTest {
+class FileServiceTest {
   private static final String FILE_ID = "fileId";
   private final BucketComponent bucketComponent = mock();
   private final FileService subject = new FileService(bucketComponent);
