@@ -3,16 +3,12 @@ package app.hackoholics.api.file;
 import static app.hackoholics.api.model.exception.ApiException.ExceptionType.SERVER_EXCEPTION;
 
 import app.hackoholics.api.model.exception.ApiException;
-import app.hackoholics.api.model.exception.BadRequestException;
 import com.lowagie.text.DocumentException;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Base64;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -56,7 +52,7 @@ public class TemplateHandler<T> {
     templateResolver.setCharacterEncoding("UTF-8");
     templateResolver.setTemplateMode(TemplateMode.HTML);
 
-    TemplateEngine templateEngine = new TemplateEngine();
+    TemplateEngine templateEngine = new SpringTemplateEngine();
     templateEngine.setTemplateResolver(templateResolver);
     return templateEngine;
   }
