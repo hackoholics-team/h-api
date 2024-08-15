@@ -1,19 +1,19 @@
 package app.hackoholics.api.endpoint.security;
 
 import app.hackoholics.api.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @AllArgsConstructor
-@Getter
-@ToString
-@EqualsAndHashCode
+@NoArgsConstructor
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Principal implements UserDetails {
   private String bearer;
   private User user;
