@@ -1,6 +1,7 @@
 package app.hackoholics.api.endpoint.controller;
 
 import app.hackoholics.api.endpoint.mapper.UserRestMapper;
+import app.hackoholics.api.endpoint.rest.model.InlineObject;
 import app.hackoholics.api.endpoint.rest.model.User;
 import app.hackoholics.api.endpoint.security.AuthProvider;
 import app.hackoholics.api.service.UserService;
@@ -27,5 +28,15 @@ public class SecurityController {
   public User signUp(@RequestBody User toCreate) {
     var toSave = mapper.toDomain(toCreate);
     return mapper.toRest(userService.save(toSave));
+  }
+
+  @PostMapping(value = "/processing")
+  public boolean isSignupStillProcessed(@RequestBody InlineObject payload) {
+    try {
+      userService.getByEmailAndAuthenticationId(payload.getEmail(), payload.getUid());
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 }
