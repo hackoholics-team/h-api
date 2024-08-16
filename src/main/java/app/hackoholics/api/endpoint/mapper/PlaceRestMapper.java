@@ -12,16 +12,24 @@ public class PlaceRestMapper {
   public PlacesSearchResult toRest(com.google.maps.model.PlacesSearchResult model) {
     var geometry = model.geometry;
     var bounds = geometry.viewport;
+    var openings = model.openingHours;
+    var photos = model.photos;
     return new PlacesSearchResult()
         .name(model.name)
         .address(model.formattedAddress)
-        .photo(model.photos[0].photoReference)
+        .photo(photos == null ? null : photos[0].photoReference)
         .rating((double) model.rating)
         .totalRate(model.userRatingsTotal)
         .openingHours(
             new PlacesSearchResultOpeningHours()
-                .open(model.openingHours.periods[0].open.time.toString())
-                .close(model.openingHours.periods[0].close.time.toString()))
+                .open(
+                    openings == null || openings.periods == null
+                        ? null
+                        : openings.periods[0].open.time.toString())
+                .close(
+                    openings == null || openings.periods == null
+                        ? null
+                        : openings.periods[0].close.time.toString()))
         .geometry(
             new PlacesSearchResultGeometry()
                 .lat(geometry.location.lat)
