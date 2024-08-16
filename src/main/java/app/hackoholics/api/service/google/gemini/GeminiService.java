@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GeminiService {
   private static final String PROMPT_TEMPLATE =
-      "Why is %s a better place for me according to this following requirements %s in 10 lines";
+      "What can I do at %s based on my following requirements %s?";
   private final String location;
   private final String modelType;
   private final GoogleConf googleConf;
