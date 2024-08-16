@@ -19,8 +19,8 @@ public class MapsApi {
 
   public PlacesSearchResult[] getNationalParkAndNatureReserve(String address)
       throws IOException, InterruptedException, ApiException {
-    String QUERY_TEMPLATE = "National parks and nature reserve around %s";
-    return PlacesApi.textSearchQuery(geoApiContext, String.format(QUERY_TEMPLATE, address))
+    String queryTemplate = "National parks and nature reserve around %s";
+    return PlacesApi.textSearchQuery(geoApiContext, String.format(queryTemplate, address))
         .await()
         .results;
   }

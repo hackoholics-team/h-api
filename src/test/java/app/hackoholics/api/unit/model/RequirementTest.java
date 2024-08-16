@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-public class RequirementTest {
+class RequirementTest {
   public final ObjectMapper mapper = new ObjectMapper();
 
   @Test
