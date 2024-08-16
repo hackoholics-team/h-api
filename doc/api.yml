@@ -266,6 +266,39 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
+  /places/about:
+    get:
+      tags:
+        - Place
+      summary: Get place description
+      operationId: aboutParksOrReserve
+      parameters:
+        - name: placeId
+          in: query
+          required: true
+          schema:
+            type: string
+      security:
+        - BearerAuth: [ ]
+      responses:
+        "200":
+          description: List of parks and reserve
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlacesSearchResult'
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
+
 components:
   securitySchemes:
     BearerAuth:
@@ -330,6 +363,8 @@ components:
           type: string
         address:
           type: string
+        placeId:
+          type: string
         geometry:
           type: object
           properties:
@@ -361,6 +396,52 @@ components:
               type: string
             isOpenNow:
               type: boolean
+    PlaceDetails:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        placeId:
+          type: string
+        reason:
+          type: string
+        overview:
+          type: string
+        localPhone:
+          type: string
+        internationalPhone:
+          type: string
+        photos:
+          type: array
+          items:
+            type: string
+        website:
+          type: string
+        geometry:
+          type: object
+          properties:
+            lat:
+              type: string
+              format: double
+            lon:
+              type: string
+              format: double
+            bounds:
+              type: array
+              items:
+                type: string
+                format: double
+        photo:
+          type: string
+          description: photo url
+        rating:
+          type: string
+          format: double
+        totalRate:
+          type: integer
+
     Page:
       type: integer
       description: Start at `1`
