@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 public class PaymentMethodRestMapper {
   private final CardRestMapper cardRestMapper;
 
-  public PaymentMethod toRest(app.hackoholics.api.model.billing.PaymentMethod domain) {
+  public PaymentMethod toRest(app.hackoholics.api.model.PaymentMethod domain) {
     return new PaymentMethod().id(domain.getId()).card(cardRestMapper.toRest(domain.getCard()));
   }
 
-  public app.hackoholics.api.model.billing.PaymentMethod toDomain(PaymentMethod rest) {
-    return new app.hackoholics.api.model.billing.PaymentMethod(
+  public app.hackoholics.api.model.PaymentMethod toDomain(PaymentMethod rest) {
+    return new app.hackoholics.api.model.PaymentMethod(
         rest.getId(), cardRestMapper.toDomain(rest.getCard()));
   }
 }

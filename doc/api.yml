@@ -441,7 +441,7 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
-  /users/{userId}/pay:
+  /users/{userId}/payments:
     post:
       tags:
         - Paying
@@ -460,14 +460,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pay"
+              $ref: "#/components/schemas/Payment"
       responses:
         "200":
           description: payment method
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pay"
+                $ref: "#/components/schemas/Payment"
         "400":
           $ref: "#/components/responses/400"
         "403":
@@ -478,7 +478,8 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
-  /users/{userId}/paymentMethods:
+
+  /users/{userId}/paymentMethods/{pmId}:
     get:
       tags:
         - Paying
@@ -493,7 +494,7 @@ paths:
             type: string
           required: true
         - in: path
-          name: paymentMethodId
+          name: pmId
           schema:
             type: string
           required: true
@@ -514,31 +515,27 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
-    delete:
+  /users/{userId}/paymentMethods:
+    get:
       tags:
         - Paying
-      summary: delete a payment method
-      operationId: deletePaymentMethod
+      summary: Get payment methods
+      operationId: getPaymentMethods
+      security:
+        - BearerAuth: []
       parameters:
         - in: path
           name: userId
           schema:
             type: string
           required: true
-        - in: path
-          name: paymentMethodId
-          schema:
-            type: string
-          required: true
       responses:
         "200":
-          description: delete a payment method
+          description: payment method
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/PaymentMethod"
+                $ref: "#/components/schemas/PaymentMethod"
         "400":
           $ref: "#/components/responses/400"
         "403":
@@ -567,7 +564,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Card"
+              $ref: "#/components/schemas/PaymentMethod"
       responses:
         "200":
           description: payment method
@@ -622,33 +619,26 @@ components:
           schema:
             $ref: "#/components/schemas/InternalServerException"
   schemas:
-    Pay:
+    Payment:
       type: object
       properties:
         id:
           type: string
         amount:
           type: integer
-        creationDateTime:
-          type: integer
+        creationDatetime:
+          type: string
+          format: date-time
         currency:
           type: string
-        paymentMethod:
+        paymentMethodId:
           type: string
-          description: id of payment method
     PaymentMethod:
       type: object
       properties:
-        id:
-          type: string
-        card:
-          $ref: "#/components/schemas/Card"
-    Card:
-      type: object
-      properties:
-        id:
-          type: string
         number:
+          type: string
+        cvc:
           type: string
         brand:
           type: string
