@@ -20,8 +20,7 @@ public class PaymentService {
 
   @SneakyThrows
   public PaymentMethod crupdate(PaymentMethod toSave) {
-    var stripeMethod = stripeConf.createPaymentMethod(toSave);
-    toSave.setId(stripeMethod.getId());
+    stripeConf.createPaymentMethod(toSave);
     return payMethodRepository.save(toSave);
   }
 

@@ -18,6 +18,7 @@ public class PaymentRestMapper {
 
   public app.hackoholics.api.model.PaymentMethod toDomain(PaymentMethod domain) {
     return app.hackoholics.api.model.PaymentMethod.builder()
+        .id(domain.getId())
         .user(AuthProvider.getUser())
         .brand(domain.getBrand())
         .number(domain.getNumber())

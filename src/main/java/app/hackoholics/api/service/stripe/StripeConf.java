@@ -1,15 +1,14 @@
 package app.hackoholics.api.service.stripe;
 
-import static com.stripe.param.PaymentMethodCreateParams.Type.CARD;
-import static com.stripe.param.checkout.SessionCreateParams.Mode.PAYMENT;
-
+import app.hackoholics.api.endpoint.security.AuthProvider;
 import app.hackoholics.api.model.Payment;
+import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentMethod;
-import com.stripe.model.checkout.Session;
 import com.stripe.net.RequestOptions;
-import com.stripe.param.PaymentMethodCreateParams;
-import com.stripe.param.checkout.SessionCreateParams;
+import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.PaymentMethodAttachParams;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,35 +18,32 @@ public class StripeConf {
 
   public StripeConf(@Value("${stripe.api.key}") String apiKey) {
     this.apiKey = apiKey;
+    Stripe.apiKey = apiKey;
   }
 
   public RequestOptions getOptions() {
     return RequestOptions.builder().setApiKey(apiKey).build();
   }
 
-  public PaymentMethod createPaymentMethod(app.hackoholics.api.model.PaymentMethod toSave)
+  public void createPaymentMethod(app.hackoholics.api.model.PaymentMethod toSave)
       throws StripeException {
-    var card =
-        PaymentMethodCreateParams.CardDetails.builder()
-            .setNumber(toSave.getNumber())
-            .setCvc(toSave.getCvc())
-            .setExpMonth((long) toSave.getExpMonth())
-            .setExpYear((long) toSave.getExpYear())
-            .build();
-    var paymentMethod = PaymentMethodCreateParams.builder().setType(CARD).setCard(card).build();
-    return com.stripe.model.PaymentMethod.create(paymentMethod, getOptions());
+    PaymentMethodAttachParams params =
+        PaymentMethodAttachParams.builder().setCustomer(toSave.getUser().getId()).build();
+
+    PaymentMethod paymentMethod = PaymentMethod.retrieve(toSave.getId());
+    paymentMethod.attach(params, getOptions());
   }
 
   public void initiatePayment(Payment payment) throws StripeException {
-    var pay =
-        SessionCreateParams.builder()
-            .addLineItem(
-                SessionCreateParams.LineItem.builder()
-                    .setPrice(String.valueOf(payment.getAmount() / 100))
-                    .build())
+    PaymentIntentCreateParams params =
+        PaymentIntentCreateParams.builder()
+            .setAmount((long) payment.getAmount())
             .setCurrency(payment.getCurrency())
-            .setMode(PAYMENT)
+            .setPaymentMethod(payment.getPaymentMethodId())
+            .setCustomer(AuthProvider.getUser().getId())
+            .setConfirm(true)
+            .setOffSession(true)
             .build();
-    Session.create(pay, getOptions());
+    PaymentIntent.create(params, getOptions());
   }
 }
