@@ -30,7 +30,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @ContextConfiguration(initializers = PreferredPlaceControllerIT.ContextInitializer.class)
 @AutoConfigureMockMvc
-public class PreferredPlaceControllerIT {
+class PreferredPlaceControllerIT {
   @MockBean GoogleConf googleConf;
   @MockBean GeminiService geminiService;
   @MockBean FileService fileService;
