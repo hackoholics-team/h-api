@@ -36,6 +36,7 @@ public class SecurityConf {
             new OrRequestMatcher(
                 new AntPathRequestMatcher("/ping", GET.name()),
                 new AntPathRequestMatcher("/signup", POST.name()),
+                new AntPathRequestMatcher("/processing", POST.name()),
                 new AntPathRequestMatcher("/**", OPTIONS.toString())));
     http.addFilterBefore(
             new AuthFilter(anonymousRequest, firebaseService, service),
@@ -48,6 +49,8 @@ public class SecurityConf {
                     .requestMatchers("/ping")
                     .permitAll()
                     .requestMatchers(POST, "/signup")
+                    .permitAll()
+                    .requestMatchers(POST, "/processing")
                     .permitAll()
                     .requestMatchers(POST, "/signin")
                     .authenticated()

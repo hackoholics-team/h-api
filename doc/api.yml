@@ -85,6 +85,44 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
+
+  /processing:
+    post:
+      tags:
+        - Security
+      summary: Check if user successfully finished signup
+      operationId: isSignupStillProcessed
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                uid:
+                  type: string
+      responses:
+        "201":
+          description: Signed up user.
+          content:
+            text/plain:
+              schema:
+                type: boolean
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+
   /users/{uId}/raw:
     put:
       tags:
