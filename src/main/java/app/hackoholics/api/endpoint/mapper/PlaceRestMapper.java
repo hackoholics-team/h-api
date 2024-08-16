@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PlaceRestMapper {
+  public static final String PHOTO_BASE_URL =
+      "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=%s&key=";
 
   public PlacesSearchResult toRest(com.google.maps.model.PlacesSearchResult model) {
     var geometry = model.geometry;
@@ -17,7 +19,7 @@ public class PlaceRestMapper {
     return new PlacesSearchResult()
         .name(model.name)
         .address(model.formattedAddress)
-        .photo(photos == null ? null : photos[0].photoReference)
+        .photo(photos == null ? null : String.format(PHOTO_BASE_URL, photos[0].photoReference))
         .rating((double) model.rating)
         .totalRate(model.userRatingsTotal)
         .openingHours(
