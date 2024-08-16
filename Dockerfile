@@ -1,5 +1,6 @@
 FROM gradle:8.5-jdk21 AS build
 
+
 COPY . /app
 WORKDIR /app
 RUN apt-get update && apt-get install -y maven
