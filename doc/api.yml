@@ -351,7 +351,7 @@ paths:
                 type: string
       responses:
         "200":
-          description: List of parks and reserve
+          description: List of requirements
           content:
             application/json:
               schema:
@@ -369,6 +369,78 @@ paths:
         "500":
           $ref: "#/components/responses/500"
 
+  /users/{uId}/preferences:
+    get:
+      tags:
+        - User
+      summary: Get user preferences
+      operationId: getPreferences
+      parameters:
+        - name: uId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - BearerAuth: [ ]
+      responses:
+        "200":
+          description: List of preferences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PreferedPlace'
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - User
+      summary: Crupdate user references
+      operationId: crupdateUserPreferences
+      parameters:
+        - name: uId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PreferedPlace'
+      responses:
+        "200":
+          description: List of preferences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PreferedPlace'
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
 components:
   securitySchemes:
     BearerAuth:
@@ -511,7 +583,11 @@ components:
           format: double
         totalRate:
           type: integer
-
+    PreferedPlace:
+      type: object
+      properties:
+        placeId:
+          type: string
     Page:
       type: integer
       description: Start at `1`
