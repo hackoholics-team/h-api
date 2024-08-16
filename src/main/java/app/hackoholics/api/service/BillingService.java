@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BillingService {
-  @Value("${stripe.apikey}")
+  @Value("${stripe.api.key}")
   private String apiKey;
 
   public BillingService() {
