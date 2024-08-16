@@ -441,7 +441,7 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
-  /users/{userId}/payments:
+  /users/{userId}/paymentMethods/{pmId}/payments:
     post:
       tags:
         - Paying
@@ -452,6 +452,11 @@ paths:
       parameters:
         - in: path
           name: userId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: pmId
           schema:
             type: string
           required: true
