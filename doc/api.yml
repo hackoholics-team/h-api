@@ -386,14 +386,14 @@ paths:
         content:
           application/json:
             schema:
-               $ref: "#/components/schemas/Subscribe"
+               $ref: "#/components/schemas/Subscription"
       responses:
         "200":
           description: subscription details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subscribe'
+                $ref: '#/components/schemas/Subscription'
         "400":
           $ref: "#/components/responses/400"
         "403":
@@ -656,7 +656,7 @@ components:
           schema:
             $ref: "#/components/schemas/TooManyRequestsException"
     500:
-      description: Internal server error
+      description: InteSubscribeTypeEnumrnal server error
       content:
         application/json:
           schema:
@@ -711,13 +711,14 @@ components:
           type: string
         photoId:
           type: string
-    Subscribe:
+    Subscription:
       type: object
       properties:
         id:
           type: string
         creationDatetime:
           type: string
+          format: date-time
         user:
           $ref: "#/components/schemas/User"
         subscribeType:
