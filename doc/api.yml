@@ -441,6 +441,150 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
+  /users/{userId}/pay:
+    post:
+      tags:
+        - Paying
+      summary: pay the bill
+      operationId: pay
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Pay"
+      responses:
+        "200":
+          description: payment method
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pay"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+  /users/{userId}/paymentMethods:
+    get:
+      tags:
+        - Paying
+      summary: Retrieve a payment method
+      operationId: getPaymentMethod
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: paymentMethodId
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: payment method
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentMethod"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+    delete:
+      tags:
+        - Paying
+      summary: delete a payment method
+      operationId: deletePaymentMethod
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: paymentMethodId
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: delete a payment method
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentMethod"
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - Paying
+      summary: Create or update payment method
+      operationId: crupdatePaymentMethod
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Card"
+      responses:
+        "200":
+          description: payment method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
 components:
   securitySchemes:
     BearerAuth:
@@ -478,6 +622,42 @@ components:
           schema:
             $ref: "#/components/schemas/InternalServerException"
   schemas:
+    Pay:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: integer
+        creationDateTime:
+          type: integer
+        currency:
+          type: string
+        paymentMethod:
+          type: string
+          description: id of payment method
+    PaymentMethod:
+      type: object
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+        card:
+          $ref: "#/components/schemas/Card"
+        creationDateTime:
+          type: integer
+    Card:
+      type: object
+      properties:
+        id:
+          type: string
+        brand:
+          type: string
+        exp_month:
+          type: integer
+        exp_year:
+          type: integer
     User:
       type: object
       properties:
