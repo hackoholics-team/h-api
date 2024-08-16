@@ -643,12 +643,12 @@ components:
           type: string
         card:
           $ref: "#/components/schemas/Card"
-        creationDateTime:
-          type: integer
     Card:
       type: object
       properties:
         id:
+          type: string
+        number:
           type: string
         brand:
           type: string
