@@ -31,6 +31,7 @@ public abstract class AbstractContextInitializer
         "project.access.key={}",
         "google.project.id=dummy",
         "bucket.name=dummy",
+        "google.api.key=dummy",
         "sentry.dsn=https://public@sentry.example.com/1",
         "sentry.environment=prod",
         "spring.flyway.locations=classpath:/db/migration," + FLYWAY_TESTDATA_PATH);

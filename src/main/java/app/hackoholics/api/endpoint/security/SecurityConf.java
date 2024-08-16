@@ -59,6 +59,8 @@ public class SecurityConf {
                     .authenticated()
                     .requestMatchers(GET, "/files/*/raw")
                     .authenticated()
+                    .requestMatchers(GET, "/places")
+                    .authenticated()
                     .anyRequest()
                     .denyAll())
         .csrf(AbstractHttpConfigurer::disable)
