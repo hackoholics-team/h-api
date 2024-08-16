@@ -641,8 +641,6 @@ components:
       properties:
         id:
           type: string
-        object:
-          type: string
         card:
           $ref: "#/components/schemas/Card"
         creationDateTime:
