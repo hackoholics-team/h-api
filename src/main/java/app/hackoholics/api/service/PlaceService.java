@@ -1,6 +1,7 @@
 package app.hackoholics.api.service;
 
 import app.hackoholics.api.service.google.maps.MapsApi;
+import com.google.maps.model.PlaceDetails;
 import com.google.maps.model.PlacesSearchResult;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -14,5 +15,10 @@ public class PlaceService {
   @SneakyThrows
   public PlacesSearchResult[] getNationalParkAndNatureReserve(String address) {
     return mapsApi.getNationalParkAndNatureReserve(address);
+  }
+
+  @SneakyThrows
+  public PlaceDetails getPlaceDetails(String placeId) {
+    return mapsApi.getPlaceDetails(placeId);
   }
 }

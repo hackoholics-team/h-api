@@ -273,7 +273,7 @@ paths:
       summary: Get place description
       operationId: aboutParksOrReserve
       parameters:
-        - name: placeName
+        - name: placeId
           in: query
           required: true
           schema:
@@ -363,7 +363,7 @@ components:
           type: string
         address:
           type: string
-        reason:
+        placeId:
           type: string
         geometry:
           type: object
@@ -396,6 +396,52 @@ components:
               type: string
             isOpenNow:
               type: boolean
+    PlaceDetails:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        placeId:
+          type: string
+        reason:
+          type: string
+        overview:
+          type: string
+        localPhone:
+          type: string
+        internationalPhone:
+          type: string
+        photos:
+          type: array
+          items:
+            type: string
+        website:
+          type: string
+        geometry:
+          type: object
+          properties:
+            lat:
+              type: string
+              format: double
+            lon:
+              type: string
+              format: double
+            bounds:
+              type: array
+              items:
+                type: string
+                format: double
+        photo:
+          type: string
+          description: photo url
+        rating:
+          type: string
+          format: double
+        totalRate:
+          type: integer
+
     Page:
       type: integer
       description: Start at `1`
