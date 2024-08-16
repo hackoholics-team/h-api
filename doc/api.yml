@@ -284,7 +284,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlacesSearchResult'
+                $ref: '#/components/schemas/PlaceDetails'
         "400":
           $ref: "#/components/responses/400"
         "403":
@@ -535,7 +535,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaymentMethod"
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentMethod"
         "400":
           $ref: "#/components/responses/400"
         "403":
@@ -636,6 +638,8 @@ components:
     PaymentMethod:
       type: object
       properties:
+        id:
+          type: string
         number:
           type: string
         cvc:
