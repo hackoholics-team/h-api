@@ -54,7 +54,7 @@ public class StripeConf {
             .setAmount((long) payment.getAmount())
             .setCurrency(payment.getCurrency())
             .setPaymentMethod(payment.getPaymentMethodId())
-            .setCustomer(AuthProvider.getUser().getId())
+            .setCustomer(AuthProvider.getUser().getStripeId())
             .setConfirm(true)
             .setOffSession(true)
             .build();

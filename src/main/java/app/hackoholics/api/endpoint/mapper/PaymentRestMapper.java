@@ -1,5 +1,6 @@
 package app.hackoholics.api.endpoint.mapper;
 
+import app.hackoholics.api.endpoint.rest.model.Payment;
 import app.hackoholics.api.endpoint.rest.model.PaymentMethod;
 import app.hackoholics.api.endpoint.security.AuthProvider;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,25 @@ public class PaymentRestMapper {
         .cvc(domain.getCvc())
         .expYear(domain.getExpYear())
         .expMonth(domain.getExpMonth())
+        .build();
+  }
+
+  public Payment toRest(app.hackoholics.api.model.Payment domain) {
+    return new Payment()
+        .id(domain.getId())
+        .creationDatetime(domain.getCreationDatetime())
+        .paymentMethodId(domain.getPaymentMethodId())
+        .amount(domain.getAmount())
+        .currency(domain.getCurrency());
+  }
+
+  public app.hackoholics.api.model.Payment toDomain(Payment domain) {
+    return app.hackoholics.api.model.Payment.builder()
+        .id(domain.getId())
+        .creationDatetime(domain.getCreationDatetime())
+        .paymentMethodId(domain.getPaymentMethodId())
+        .amount(domain.getAmount())
+        .currency(domain.getCurrency())
         .build();
   }
 }

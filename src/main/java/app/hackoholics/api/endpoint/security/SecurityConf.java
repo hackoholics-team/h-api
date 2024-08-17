@@ -70,6 +70,8 @@ public class SecurityConf {
                     .authenticated()
                     .requestMatchers(new SelfUserMatcher(GET, "/users/*/paymentMethods/*"))
                     .authenticated()
+                    .requestMatchers(POST, "/users/*/paymentMethods/*/payments")
+                    .authenticated()
                     .requestMatchers(PUT, "/files/*/raw")
                     .authenticated()
                     .requestMatchers(GET, "/files/*/raw")

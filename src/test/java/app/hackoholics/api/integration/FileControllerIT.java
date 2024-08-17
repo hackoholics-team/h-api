@@ -13,6 +13,8 @@ import app.hackoholics.api.service.FileService;
 import app.hackoholics.api.service.google.GoogleConf;
 import app.hackoholics.api.service.google.firebase.FirebaseService;
 import app.hackoholics.api.service.google.gemini.GeminiService;
+import app.hackoholics.api.service.stripe.StripeConf;
+import com.stripe.model.Customer;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -39,6 +41,7 @@ class FileControllerIT {
   @MockBean GeminiService geminiService;
   @MockBean FileService fileService;
   @MockBean FirebaseService firebaseService;
+  @MockBean StripeConf stripeConf;
 
   @BeforeEach
   void setUp() {
@@ -86,6 +89,9 @@ class FileControllerIT {
   @Test
   void upload_user_file_ok() throws IOException, InterruptedException {
     when(fileService.uploadFile(any(), any())).thenReturn(FILE_ID);
+    var customer = new Customer();
+    customer.setId("dummy");
+    when(stripeConf.createCustomer(any())).thenReturn(customer);
 
     HttpClient unauthenticatedClient = HttpClient.newBuilder().build();
     String basePath = "http://localhost:" + FileControllerIT.ContextInitializer.SERVER_PORT;

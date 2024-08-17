@@ -1,6 +1,7 @@
 package app.hackoholics.api.endpoint.controller;
 
 import app.hackoholics.api.endpoint.mapper.PaymentRestMapper;
+import app.hackoholics.api.endpoint.rest.model.Payment;
 import app.hackoholics.api.endpoint.rest.model.PaymentMethod;
 import app.hackoholics.api.endpoint.validator.PaymentMethodValidator;
 import app.hackoholics.api.service.PaymentService;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,5 +39,14 @@ public class PaymentController {
   public PaymentMethod crupdatePaymentMethod(
       @PathVariable("uId") String userId, @PathVariable("pmId") String pmId) {
     return mapper.toRest(service.getPaymentMethod(pmId));
+  }
+
+  @PostMapping("/users/{uId}/paymentMethods/{pmId}/payments")
+  public Payment initiatePayment(
+      @PathVariable("uId") String uId,
+      @PathVariable("pmId") String pmId,
+      @RequestBody Payment payment) {
+    var toSave = mapper.toDomain(payment);
+    return mapper.toRest(service.initiatePayment(toSave));
   }
 }
