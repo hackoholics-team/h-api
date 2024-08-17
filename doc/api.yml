@@ -368,6 +368,72 @@ paths:
           $ref: "#/components/responses/429"
         "500":
           $ref: "#/components/responses/500"
+  /users/{uId}/subscriptions:
+    get:
+      tags:
+        - Subscribe
+      summary: get current user subscriptions
+      operationId: getSubscription
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: uId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: subscription details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - Subscribe
+      operationId: crupdateSubscription
+      summary: Create or update a subscription
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: uId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subscription"
+      responses:
+        "200":
+          description: subscription details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        "400":
+          $ref: "#/components/responses/400"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
 
   /users/{uId}/preferences:
     get:
@@ -620,7 +686,7 @@ components:
           schema:
             $ref: "#/components/schemas/TooManyRequestsException"
     500:
-      description: Internal server error
+      description: InteSubscribeTypeEnumrnal server error
       content:
         application/json:
           schema:
@@ -675,6 +741,19 @@ components:
           type: string
         photoId:
           type: string
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+        creationDatetime:
+          type: string
+          format: date-time
+        subscribeType:
+          type: string
+          enum:
+            - FREE
+            - PREMIUM
     PlacesSearchResult:
       type: object
       properties:
