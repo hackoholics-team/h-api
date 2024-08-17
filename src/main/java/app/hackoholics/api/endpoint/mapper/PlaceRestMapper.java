@@ -67,11 +67,12 @@ public class PlaceRestMapper {
                 .map(photo -> String.format(PHOTO_BASE_URL, photo.photoReference))
                 .toList();
     var photo = photos == null ? null : photos.getFirst();
+    var summary = model.editorialSummary == null ? null : model.editorialSummary.overview;
     return new PlaceDetails()
         .placeId(model.placeId)
         .name(model.name)
         .address(model.formattedAddress)
-        .overview(model.editorialSummary.overview)
+        .overview(summary)
         .localPhone(model.formattedPhoneNumber)
         .internationalPhone(model.internationalPhoneNumber)
         .website(model.website == null ? null : model.website.toString())
