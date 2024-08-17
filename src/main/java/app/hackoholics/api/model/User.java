@@ -23,6 +23,7 @@ public class User implements Serializable {
   private String firstName;
   private String lastName;
   private String username;
+  private String stripeId;
   @Timestamp private Instant birthDate;
   @CreationTimestamp private Instant creationDatetime;
   private String firebaseId;

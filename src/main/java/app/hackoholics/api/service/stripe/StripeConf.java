@@ -1,14 +1,20 @@
 package app.hackoholics.api.service.stripe;
 
+import static java.util.UUID.randomUUID;
+
 import app.hackoholics.api.endpoint.security.AuthProvider;
 import app.hackoholics.api.model.Payment;
+import app.hackoholics.api.model.User;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentMethod;
 import com.stripe.net.RequestOptions;
+import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.PaymentMethodAttachParams;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +29,14 @@ public class StripeConf {
 
   public RequestOptions getOptions() {
     return RequestOptions.builder().setApiKey(apiKey).build();
+  }
+
+  @SneakyThrows
+  public Customer createCustomer(User user) {
+    var name = user.getUsername() == null ? "Customer" + randomUUID() : user.getUsername();
+    CustomerCreateParams params =
+        CustomerCreateParams.builder().setEmail(user.getEmail()).setName(name).build();
+    return Customer.create(params, getOptions());
   }
 
   public void createPaymentMethod(app.hackoholics.api.model.PaymentMethod toSave)

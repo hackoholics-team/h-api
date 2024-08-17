@@ -7,6 +7,8 @@ import static app.hackoholics.api.conf.TestConf.anAvailablePort;
 import static app.hackoholics.api.conf.TestConf.setUpFirebaseService;
 import static app.hackoholics.api.conf.TestConf.user;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import app.hackoholics.api.AbstractContextInitializer;
@@ -17,6 +19,8 @@ import app.hackoholics.api.endpoint.rest.client.ApiException;
 import app.hackoholics.api.service.google.GoogleConf;
 import app.hackoholics.api.service.google.firebase.FirebaseService;
 import app.hackoholics.api.service.google.gemini.GeminiService;
+import app.hackoholics.api.service.stripe.StripeConf;
+import com.stripe.model.Customer;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -39,6 +43,7 @@ class SecurityControllerIT {
   @MockBean GoogleConf googleConf;
   @MockBean GeminiService geminiService;
   @MockBean FirebaseService firebaseService;
+  @MockBean StripeConf stripeConf;
 
   private ApiClient anApiClient(String token) {
     return TestConf.anApiClient(token, ContextInitializer.SERVER_PORT);
@@ -95,6 +100,9 @@ class SecurityControllerIT {
 
   @Test
   void create_user_ok() throws ApiException {
+    var customer = new Customer();
+    customer.setId("dummy");
+    when(stripeConf.createCustomer(any())).thenReturn(customer);
     ApiClient client = anApiClient(VALID_TOKEN);
     SecurityApi api = new SecurityApi(client);
 
