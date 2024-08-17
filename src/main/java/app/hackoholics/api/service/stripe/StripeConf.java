@@ -42,7 +42,7 @@ public class StripeConf {
   public void createPaymentMethod(app.hackoholics.api.model.PaymentMethod toSave)
       throws StripeException {
     PaymentMethodAttachParams params =
-        PaymentMethodAttachParams.builder().setCustomer(toSave.getUser().getId()).build();
+        PaymentMethodAttachParams.builder().setCustomer(toSave.getUser().getStripeId()).build();
 
     PaymentMethod paymentMethod = PaymentMethod.retrieve(toSave.getId());
     paymentMethod.attach(params, getOptions());

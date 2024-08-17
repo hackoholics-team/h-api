@@ -16,7 +16,11 @@ public class SubscriptionService {
   }
 
   public Subscription getByUserId(String userId) {
-    return repository.findByUserId(userId).stream()
+    var subscriptions = repository.findByUserId(userId);
+    if (subscriptions.isEmpty()) {
+      return null;
+    }
+    return subscriptions.stream()
         .sorted(Comparator.comparing(Subscription::getCreationDatetime))
         .toList()
         .getFirst();

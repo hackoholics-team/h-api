@@ -26,6 +26,7 @@ public class SubscriptionController {
 
   @GetMapping("/users/{uId}/subscriptions")
   public Subscription getSubscription(@PathVariable("uId") String uId) {
-    return subscriptionMapper.toRest(service.getByUserId(uId));
+    var subscription = service.getByUserId(uId);
+    return subscription == null ? null : subscriptionMapper.toRest(subscription);
   }
 }
