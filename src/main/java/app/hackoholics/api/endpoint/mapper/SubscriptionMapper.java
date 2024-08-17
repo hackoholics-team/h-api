@@ -1,7 +1,7 @@
 package app.hackoholics.api.endpoint.mapper;
 
 import app.hackoholics.api.endpoint.rest.model.Subscription;
-import java.time.format.DateTimeFormatter;
+import app.hackoholics.api.endpoint.security.AuthProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,17 +13,16 @@ public class SubscriptionMapper {
   public Subscription toRest(app.hackoholics.api.model.Subscription domain) {
     return new Subscription()
         .id(domain.getId())
-        .creationDatetime(domain.getCreationDtatetime())
-        .user(userRestMapper.toRest(domain.getUser()))
-        .subscribeType(domain.getSubscribeTypeEnum());
+        .creationDatetime(domain.getCreationDatetime())
+        .subscribeType(domain.getSubscriptionType());
   }
 
   public app.hackoholics.api.model.Subscription toDomain(Subscription rest) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    return new app.hackoholics.api.model.Subscription(
-        rest.getId(),
-        rest.getCreationDatetime(),
-        userRestMapper.toDomain(rest.getUser()),
-        rest.getSubscribeType());
+    return app.hackoholics.api.model.Subscription.builder()
+        .id(rest.getId())
+        .creationDatetime(rest.getCreationDatetime())
+        .userId(AuthProvider.getUser().getId())
+        .subscriptionType(rest.getSubscribeType())
+        .build();
   }
 }

@@ -4,6 +4,7 @@ import app.hackoholics.api.endpoint.mapper.PaymentRestMapper;
 import app.hackoholics.api.endpoint.rest.model.Payment;
 import app.hackoholics.api.endpoint.rest.model.PaymentMethod;
 import app.hackoholics.api.endpoint.validator.PaymentMethodValidator;
+import app.hackoholics.api.endpoint.validator.PaymentValidator;
 import app.hackoholics.api.service.PaymentService;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class PaymentController {
   private final PaymentService service;
   private final PaymentRestMapper mapper;
   private final PaymentMethodValidator paymentMethodValidator;
+  private final PaymentValidator paymentValidator;
 
   @GetMapping("/users/{uId}/paymentMethods")
   public List<PaymentMethod> getPaymentMethods(@PathVariable("uId") String userId) {
@@ -31,6 +33,7 @@ public class PaymentController {
   @PutMapping("/users/{uId}/paymentMethods")
   public PaymentMethod crupdatePaymentMethod(
       @PathVariable("uId") String userId, @RequestBody PaymentMethod paymentMethod) {
+    paymentMethodValidator.accept(paymentMethod);
     var toSave = mapper.toDomain(paymentMethod);
     return mapper.toRest(service.crupdate(toSave));
   }
@@ -46,6 +49,7 @@ public class PaymentController {
       @PathVariable("uId") String uId,
       @PathVariable("pmId") String pmId,
       @RequestBody Payment payment) {
+    paymentValidator.accept(payment);
     var toSave = mapper.toDomain(payment);
     return mapper.toRest(service.initiatePayment(toSave));
   }
