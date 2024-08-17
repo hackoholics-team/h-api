@@ -1,13 +1,11 @@
 package app.hackoholics.api.unit.model;
 
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import app.hackoholics.api.model.Requirement;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -24,10 +22,12 @@ class RequirementTest {
 
     assertEquals(requirement, deserialized);
   }
+
   @Test
   public void testBuilderAndGetters() {
     // Utiliser le Builder pour créer une instance de Requirement
-    Requirement requirement = Requirement.builder()
+    Requirement requirement =
+        Requirement.builder()
             .id("user123")
             .requirements(Arrays.asList("Requirement 1", "Requirement 2"))
             .build();
@@ -51,7 +51,8 @@ class RequirementTest {
   @Test
   public void testAllArgsConstructor() {
     // Créer une instance avec le constructeur avec tous les arguments
-    Requirement requirement = new Requirement("user123", Arrays.asList("Requirement 1", "Requirement 2"));
+    Requirement requirement =
+        new Requirement("user123", Arrays.asList("Requirement 1", "Requirement 2"));
 
     // Vérifier que les valeurs sont correctement assignées
     assertEquals("user123", requirement.getId());
@@ -75,30 +76,35 @@ class RequirementTest {
   @Test
   public void testEqualsAndHashCode() {
     // Créer deux instances identiques de Requirement
-    Requirement requirement1 = Requirement.builder()
+    Requirement requirement1 =
+        Requirement.builder()
             .id("user123")
             .requirements(Arrays.asList("Requirement 1", "Requirement 2"))
             .build();
 
-    Requirement requirement2 = Requirement.builder()
+    Requirement requirement2 =
+        Requirement.builder()
             .id("user123")
             .requirements(Arrays.asList("Requirement 1", "Requirement 2"))
             .build();
 
     // Vérifier que les deux instances sont égales
     assertEquals(requirement2, requirement1);
-    assertEquals(requirement1.hashCode().isEqualT(requirement2.hashCode());
+    assertEquals(requirement1.hashCode(), requirement2.hashCode());
   }
 
   @Test
   public void testToString() {
     // Créer une instance de Requirement
-    Requirement requirement = Requirement.builder()
+    Requirement requirement =
+        Requirement.builder()
             .id("user123")
             .requirements(Arrays.asList("Requirement 1", "Requirement 2"))
             .build();
 
     // Vérifier que la méthode toString produit le résultat attendu
-    assertThat(requirement.toString()).contains("user123", "Requirement 1", "Requirement 2");
+    assertTrue(requirement.toString().contains("user123"));
+    assertTrue(requirement.toString().contains("Requirement 1"));
+    assertTrue(requirement.toString().contains("Requirement 2"));
   }
 }
